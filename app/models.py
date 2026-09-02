@@ -48,3 +48,15 @@ class Clinic(Base):
     is_active = Column(Boolean,default=True,nullable=False)
     created_at = Column(DateTime,server_default=func.now())
 
+
+
+class Appointment(Base):
+    __tablename__ = "appointments"
+    id = Column(Integer, primary_key=True, index=True)
+    clinic_id = Column(Integer, nullable=False)
+    patient_id = Column(Integer, nullable=False)
+    doctor_id = Column(Integer, nullable=False)
+    date = Column(Date, nullable=False)
+    status = Column(String(50), default="waiting")
+    token_number = Column(Integer, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())

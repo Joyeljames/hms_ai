@@ -84,3 +84,22 @@ class AdminResponse(BaseModel):
 class ClinicWithAdminCreate(BaseModel):
     clinic: ClinicCreate
     admin: AdminCreate
+
+class AppointmentCreate(BaseModel):
+    patient_id:str
+    doctor_id:int
+   
+
+class AppointmentResponse(BaseModel):
+    id:int
+    clinic_id:int
+    patient_id:str
+    doctor_id:int
+    date:date
+    status:str
+
+    class Config:
+        from_attributes = True
+
+class AppointmentStatusUpdate(BaseModel):
+    status: str
