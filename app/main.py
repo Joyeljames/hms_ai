@@ -3,6 +3,8 @@ from app.database import engine,Base
 from app import models
 from app.routers import auth as auth_router
 from app.routers import patient as patient_router
+from app.routers import admin as admin_router
+
 # Create all tables
 Base.metadata.create_all(bind = engine)
 
@@ -26,7 +28,11 @@ app.include_router(
     tags=["Patients"]
 
 )
-
+app.include_router(
+    admin_router.router,
+    prefix="/admin",
+    tags=["Admin"]
+)
 
 # Root endpoint
 @app.get("/")
