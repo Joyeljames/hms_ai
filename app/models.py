@@ -60,3 +60,20 @@ class Appointment(Base):
     status = Column(String(50), default="waiting")
     token_number = Column(Integer, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
+
+class Visits(Base):
+    __tablename__ = "visits"
+
+    id = Column(Integer,primary_key=True,index=True)
+    clinic_id = Column(Integer,nullable=False)
+    patient_id = Column(String(10),nullable=False)
+    doctor_id = Column(Integer,nullable=False)
+    appointment_id = Column(Integer,nullable=False)
+    complaint = Column(String(500),nullable=True)
+    diagnosis = Column(String(500),nullable=True)
+    notes = Column(String(1000),nullable=True)
+    follow_up_date = Column(Date,nullable=True)
+    created_at = Column(DateTime,server_default=func.now())
+
+
+

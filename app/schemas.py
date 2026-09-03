@@ -103,3 +103,25 @@ class AppointmentResponse(BaseModel):
 
 class AppointmentStatusUpdate(BaseModel):
     status: str
+
+class VisitCreate(BaseModel):
+    patient_id: str
+    appointment_id: Optional[int] = None
+    complaint: Optional[str] = None
+    diagnosis: Optional[str] = None
+    notes: Optional[str] = None
+    follow_up_date: Optional[date] = None
+
+class VisitResponse(BaseModel):
+    id: int
+    patient_id: str
+    doctor_id: int
+    appointment_id: int
+    complaint: Optional[str] = None
+    diagnosis: Optional[str] = None
+    notes: Optional[str] = None
+    follow_up_date: Optional[date] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
