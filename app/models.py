@@ -77,3 +77,15 @@ class Visits(Base):
 
 
 
+class Medicine(Base):
+    __tablename__ = "medicines"
+
+    id = Column(Integer,primary_key=True,index=True)
+    clinic_id = Column(Integer,nullable=False)
+    name = Column(String(200),nullable=False)
+    unit = Column(String(50),nullable=False)
+    price_per_unit = Column(Integer,nullable=False)
+    stock_quantity = Column(Integer,nullable=False)
+    low_stock_alert = Column(Integer,nullable=False)
+    is_active = Column(Boolean,default=True)
+    created_at = Column(DateTime,server_default=func.now())

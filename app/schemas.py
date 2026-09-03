@@ -125,3 +125,29 @@ class VisitResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class MedicineCreate(BaseModel):
+    name: str
+    unit: str
+    price_per_unit: float
+    stock_quantity: int
+    low_stock_alert: int = 10
+
+class MedicineResponse(BaseModel):
+    id: int
+    clinic_id: int
+    name: str
+    unit: str
+    price_per_unit: float
+    stock_quantity: int
+    low_stock_alert: int
+    is_active: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class MedicineUpdate(BaseModel):
+    name: Optional[str] = None
+    unit: Optional[str] = None
+    price_per_unit: Optional[float] = None
