@@ -89,3 +89,29 @@ class Medicine(Base):
     low_stock_alert = Column(Integer,nullable=False)
     is_active = Column(Boolean,default=True)
     created_at = Column(DateTime,server_default=func.now())
+
+class Prescription(Base):
+     __tablename__ = "prescription"
+
+     id = Column(Integer,primary_key=True,index=True)
+     clinic_id = Column(Integer,nullable=False)
+     patient_id = Column(String(10),nullable=False)
+     doctor_id      = Column(Integer, nullable=False)
+     visit_id       = Column(Integer, nullable=True)
+     status         = Column(String(20), default="pending")
+    # pending → dispensed → billed
+     created_at     = Column(DateTime, server_default=func.now())
+
+
+
+class PrescriptionItem(Base):
+    __tablename__ = "prescription_items"
+
+    id              = Column(Integer, primary_key=True, index=True)
+    prescription_id = Column(Integer, nullable=False)
+    medicine_id     = Column(Integer, nullable=False)
+    frequency       = Column(Integer, nullable=False)
+    duration        = Column(Integer, nullable=False)
+    quantity        = Column(Integer, nullable=False)
+    timing          = Column(String(50), nullable=True)
+    # before food / after food

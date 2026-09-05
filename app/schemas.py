@@ -151,3 +151,41 @@ class MedicineUpdate(BaseModel):
     name: Optional[str] = None
     unit: Optional[str] = None
     price_per_unit: Optional[float] = None
+
+
+class PrescriptionItemCreate(BaseModel):
+    medicine_id: int
+    frequency: int
+    duration: int
+    timing: Optional[str] = None
+
+class PrescriptionCreate(BaseModel):
+    patient_id: str
+    visit_id: Optional[int] = None
+    items: list[PrescriptionItemCreate]
+
+class PrescriptionItemResponse(BaseModel):
+    id: int
+    medicine_id: int
+    medicine_name: Optional[str] = None
+    frequency: int
+    duration: int
+    quantity: int
+    timing: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+class PrescriptionResponse(BaseModel):
+    id: int
+    patient_id: str
+    patient_name: Optional[str] = None
+    doctor_id: int
+    doctor_name: Optional[str] = None
+    visit_id: Optional[int] = None
+    status: str
+    items: list[PrescriptionItemResponse] = []
+    created_at: datetime
+
+    class Config:
+        from_attributes = True

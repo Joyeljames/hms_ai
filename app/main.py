@@ -8,7 +8,7 @@ from app.routers import superadmin as superadmin_router
 from app.routers import appointment as appointment_router
 from app.routers import visit as visit_router
 from app.routers import medicine as medicine_router
-
+from app.routers import prescription as prescription_router
 # Create all tables
 Base.metadata.create_all(bind = engine)
 
@@ -62,6 +62,11 @@ app.include_router(
     tags=["Medicines"]
 )
 
+app.include_router(
+    prescription_router.router,
+    prefix="/prescriptions",
+    tags=["Prescriptions"]
+)
 
 # Root endpoint
 @app.get("/")
