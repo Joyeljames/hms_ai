@@ -189,3 +189,31 @@ class PrescriptionResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class DispenseItem(BaseModel):
+    medicine_id:int
+    quantity:int 
+    timing:Optional[str] =None
+
+class DispenseRequest(BaseModel):
+    prescription_id: int
+    items:list[DispenseItem]
+    extra_items:Optional[list[DispenseItem]] = []
+
+class PharmacyItem(BaseModel):
+    prescription_item_id: int
+    quantity: int  # pharmacist can change this
+
+
+class ExtraItem(BaseModel):
+    medicine_id: int
+    quantity: int
+    timing: Optional[str] = None
+
+class PharmacyDispenseRequest(BaseModel):
+    items: list[PharmacyItem]
+    extra_items: Optional[list[ExtraItem]] = []
+
+
+class RestockRequest(BaseModel):
+    quantity: int

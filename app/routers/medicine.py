@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import Medicine, User
-from app.schemas import MedicineCreate, MedicineResponse, MedicineUpdate
+from app.schemas import MedicineCreate, MedicineResponse, MedicineUpdate,RestockRequest
 from app.core.auth import get_current_user
 
 router = APIRouter()
@@ -119,6 +119,38 @@ def update_medicine(
         medicine.price_per_unit  = updates.price_per_unit
 
 
+    db.commit()
+    db.refresh(medicine)
+
+    return medicine
+
+
+@router.put("/{medicine_id}/restock", response_model=MedicineResponse)
+def restock_medicine(
+    medicine_id: int,
+    restock: RestockRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role not in ["admin", "pharmacist"]:
+        raise HTTPException(
+            status_code=403,
+            detail="Only admin or pharmacist can restock"
+        )
+
+    medicine = db.query(Medicine).filter(
+        Medicine.id == medicine_id,
+        Medicine.clinic_id == current_user.clinic_id
+    ).first()
+
+    if not medicine:
+        raise HTTPException(
+            status_code=404,
+            detail="Medicine not found"
+        )
+
+    # ADD to existing stock
+    medicine.stock_quantity += restock.quantity
     db.commit()
     db.refresh(medicine)
 

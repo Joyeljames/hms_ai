@@ -9,6 +9,7 @@ from app.routers import appointment as appointment_router
 from app.routers import visit as visit_router
 from app.routers import medicine as medicine_router
 from app.routers import prescription as prescription_router
+from app.routers import pharmacy as pharmacy_router
 # Create all tables
 Base.metadata.create_all(bind = engine)
 
@@ -72,3 +73,10 @@ app.include_router(
 @app.get("/")
 def root():
     return {"message": "HMS AI is running ✅"}
+
+
+app.include_router(
+    pharmacy_router.router,
+    prefix="/pharmacy",
+    tags=["Pharmacy"]
+)
