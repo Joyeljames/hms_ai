@@ -1,4 +1,4 @@
-from sqlalchemy import Column,String,Date,DateTime,Boolean,Integer,UniqueConstraint
+from sqlalchemy import Column,String,Date,DateTime,Boolean,Integer,UniqueConstraint,Float
 from sqlalchemy.sql import func
 from app.database import Base
 from sqlalchemy import UniqueConstraint
@@ -115,3 +115,32 @@ class PrescriptionItem(Base):
     quantity        = Column(Integer, nullable=False)
     timing          = Column(String(50), nullable=True)
     # before food / after food
+
+class Bill(Base):
+
+    __tablename__ = "bills"
+
+    id = Column(Integer,primary_key=True,index=True)
+    clinic_id = Column(Integer,nullable=False)
+    patient_id = Column(String(10),nullable=False)
+    prescription_id     = Column(Integer, nullable=True)
+    appointment_id      = Column(Integer, nullable=True)
+    registration_fee    = Column(Float, default=0)
+    consultation_fee    = Column(Float, nullable=False)
+    medicine_total      = Column(Float, default=0)
+    discount            = Column(Float, default=0)
+    total_amount        = Column(Float, nullable=False)
+    payment_method      = Column(String(20), nullable=True)
+    status              = Column(String(20), default="pending")
+    created_at          = Column(DateTime, server_default=func.now())
+
+
+class ClinicSettings(Base):
+    __tablename__ = "clinic_settings"
+
+    id                  = Column(Integer, primary_key=True, index=True)
+    clinic_id           = Column(Integer, nullable=False, unique=True)
+    registration_fee    = Column(Float, default=100)
+    consultation_fee    = Column(Float, default=300)
+    follow_up_fee       = Column(Float, default=200)
+    created_at          = Column(DateTime, server_default=func.now())

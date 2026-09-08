@@ -217,3 +217,35 @@ class PharmacyDispenseRequest(BaseModel):
 
 class RestockRequest(BaseModel):
     quantity: int
+
+class BillCreate(BaseModel):
+    patient_id: str
+    prescription_id: Optional[int] = None
+    appointment_id: Optional[int] = None
+    is_new_patient: bool = False
+    discount: Optional[float] = 0
+
+class BillResponse(BaseModel):
+    id: int
+    patient_id: str
+    patient_name: Optional[str] = None
+    registration_fee: float
+    consultation_fee: float
+    medicine_total: float
+    discount: float
+    total_amount: float
+    payment_method: Optional[str] = None
+    status: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class PaymentRequest(BaseModel):
+    payment_method: str
+    # cash / upi / card
+
+class ClinicFeesUpdate(BaseModel):
+    registration_fee: float
+    consultation_fee: float
+    follow_up_fee: float

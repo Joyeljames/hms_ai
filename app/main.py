@@ -10,6 +10,7 @@ from app.routers import visit as visit_router
 from app.routers import medicine as medicine_router
 from app.routers import prescription as prescription_router
 from app.routers import pharmacy as pharmacy_router
+from app.routers import billing as billing_router
 # Create all tables
 Base.metadata.create_all(bind = engine)
 
@@ -79,4 +80,10 @@ app.include_router(
     pharmacy_router.router,
     prefix="/pharmacy",
     tags=["Pharmacy"]
+)
+
+app.include_router(
+    billing_router.router,
+    prefix="/billing",
+    tags=["Billing"]
 )

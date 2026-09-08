@@ -2,9 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import User
-from app.schemas import UserCreate, UserResponse
+from app.schemas import UserCreate, UserResponse,ClinicFeesUpdate
 from app.core.auth import get_current_user
 from app.core.security import hash_password
+from app.models import ClinicSettings
+
 
 
 router = APIRouter()
@@ -56,6 +58,8 @@ def create_staff(
     db.refresh(new_staff)
 
     return new_staff
+
+
 
 @router.get("/staff/all", response_model=list[UserResponse])
 def get_all_staff(
@@ -109,3 +113,39 @@ def deactivate_staff(
     db.refresh(staff)
 
     return staff
+
+@router.post("/settings/fees")
+def set_clinic_fees(
+    fees: ClinicFeesUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(403, "Only admin can set fees")
+
+    settings = db.query(ClinicSettings).filter(
+        ClinicSettings.clinic_id == current_user.clinic_id
+    ).first()
+
+    if settings:
+        settings.registration_fee = fees.registration_fee
+        settings.consultation_fee = fees.consultation_fee
+        settings.follow_up_fee = fees.follow_up_fee
+    else:
+        settings = ClinicSettings(
+            clinic_id=current_user.clinic_id,
+            registration_fee=fees.registration_fee,
+            consultation_fee=fees.consultation_fee,
+            follow_up_fee=fees.follow_up_fee
+        )
+    db.add(settings)
+
+    db.commit()
+    db.refresh(settings)
+
+    return {
+        "message": "Fees updated successfully ✅",
+        "registration_fee": settings.registration_fee,
+        "consultation_fee": settings.consultation_fee,
+        "follow_up_fee": settings.follow_up_fee
+    }
