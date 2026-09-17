@@ -1,16 +1,16 @@
-from langchain_groq import ChatGroq
+from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
 import os
 
+
 load_dotenv()
 
-# Create the brain (LLM
-llm = ChatGroq(
-    model="openai/gpt-oss-20b",
-    temperature=0.1,
-    api_key=os.getenv("GROQ_API_KEY")
-)
 
+llm = ChatGoogleGenerativeAI(
+    model = "gemini-3.5-flash",
+    temperature = 0.1,
+    google_api_key = os.getenv("GOOGLE_API_KEY")
+)
 prompt = """You are a medical assistant.
 
 Patient: Male, 35 years old
@@ -26,7 +26,8 @@ Paracetamol 500mg, Cetirizine 10mg, Azithromycin 500mg, Vitamin C 500mg, Amoxici
 
 Return in JSON format."""
 
-# Test the brain
+
+
 response = llm.invoke(prompt)
-print("=== GROQ RESPONSE ===")
+print("=== GEMINI RESPONSE ===")
 print(response.content)
