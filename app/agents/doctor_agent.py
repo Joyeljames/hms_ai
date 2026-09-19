@@ -172,7 +172,8 @@ workflow.add_conditional_edges(
     lambda state: state["doctor_action"],
     {
         "approved": "prescribe",
-        "rejected": END
+        "rejected": END,
+        "pending_review": END
     }
 )
 workflow.add_edge("prescribe", END)

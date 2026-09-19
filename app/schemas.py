@@ -249,3 +249,17 @@ class ClinicFeesUpdate(BaseModel):
     registration_fee: float
     consultation_fee: float
     follow_up_fee: float
+
+
+class AIGenerateRequest(BaseModel):
+    patient_id:str
+    symptoms:str
+
+class AIApproveRequest(BaseModel):
+    patient_id:str
+    visit_id:Optional[int]=None
+    diagnosis:str
+    medicines:list
+
+class AdminQuestionRequest(BaseModel):
+    question:str

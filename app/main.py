@@ -12,6 +12,7 @@ from app.routers import prescription as prescription_router
 from app.routers import pharmacy as pharmacy_router
 from app.routers import billing as billing_router
 from app.routers import export as export_router
+from app.routers import ai_agent as ai_agent_router
 # Create all tables
 Base.metadata.create_all(bind = engine)
 
@@ -71,10 +72,6 @@ app.include_router(
     tags=["Prescriptions"]
 )
 
-# Root endpoint
-@app.get("/")
-def root():
-    return {"message": "HMS AI is running ✅"}
 
 
 app.include_router(
@@ -94,3 +91,16 @@ app.include_router(
     prefix="/export",
     tags=["Export"]
 )
+
+from app.routers import ai_agent as ai_agent_router
+
+app.include_router(
+    ai_agent_router.router,
+    prefix="/ai",
+    tags=["AI Agents"]
+)
+# Root endpoint
+@app.get("/")
+def root():
+    return {"message": "HMS AI is running ✅"}
+
