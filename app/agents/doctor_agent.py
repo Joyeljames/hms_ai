@@ -26,9 +26,9 @@ class DoctorState(TypedDict):
     available_medicines:list
     diagnosis:str
     recommended_medicines:list
-    interaction:str
+    interactions:str
     doctor_action:str
-    final_prescription:str
+    final_prescription:dict
 
 # Tool 1: Get patient history from HMS AI API
 def get_patient_history(patient_id:str,token:str):

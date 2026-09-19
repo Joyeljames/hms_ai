@@ -575,7 +575,7 @@ git commit -m "feat: add [your feature description]"
 git push origin feature/your-feature-name
 ```
 
-Maintained by **Joyel J** — [ELBynx AI](https://github.com/ELBynx-AI)
+Maintained by **Joyel J** 
 
 [![GitHub](https://img.shields.io/badge/GitHub-JoyelJames-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/JoyelJames)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Joyel%20J-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/joyel-j-793859339)
@@ -598,6 +598,6 @@ Maintained by **Joyel J** — [ELBynx AI](https://github.com/ELBynx-AI)
   <strong>🏥 HMS AI — AI-Powered Hospital Management System</strong><br/>
   <em>Built in Nagercoil, Tamil Nadu 🇮🇳</em><br/>
   <em>Replacing paper records with AI intelligence.</em><br/><br/>
-  <strong>Engineered by Joyel J · ELBynx AI</strong><br/>
+  <strong>Engineered by Joyel J </strong><br/>
   <em>AI suggests. Doctor approves. Patient stays safe. ⏸️✅</em>
 </p>
