@@ -13,8 +13,10 @@ from app.routers import pharmacy as pharmacy_router
 from app.routers import billing as billing_router
 from app.routers import export as export_router
 from app.routers import ai_agent as ai_agent_router
+from fastapi.middleware.cors import CORSMiddleware
 # Create all tables
 Base.metadata.create_all(bind = engine)
+
 
 
 # Create FastAPI app
@@ -22,6 +24,13 @@ app = FastAPI(
     title="HMS AI",
     description="Hospital Management System",
     version="1.0.0"
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(
@@ -99,6 +108,10 @@ app.include_router(
     prefix="/ai",
     tags=["AI Agents"]
 )
+
+
+
+
 # Root endpoint
 @app.get("/")
 def root():
