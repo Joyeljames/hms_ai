@@ -3,12 +3,11 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import ReceptionDashboard from "./pages/reception/ReceptionDashboard";
+import DoctorDashboard from "./pages/doctor/DoctorDashboard";
 
 // Placeholder pages — we build these Days 21-24
 
-function DoctorDashboard() {
-  return <div className="p-8">Doctor Dashboard</div>;
-}
+
 function PharmacyDashboard() {
   return <div className="p-8">Pharmacy Dashboard</div>;
 }

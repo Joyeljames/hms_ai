@@ -26,7 +26,7 @@ export const getTodayStats = () => client.get("/appointments/stats/today");
 export const getDoctors = () => client.get("/appointments/doctors");
 
 // ─── VISITS ───
-export const createVisit = (data) => client.post("/visits/create", data);
+export const createVisit = (data) => client.post("/visits/create_visit", data);
 export const getPatientVisits = (patientId) => client.get(`/visits/patient/${patientId}`);
 export const getLast2Visits = (patientId) => client.get(`/visits/patient/${patientId}/last2`);
 
@@ -34,10 +34,10 @@ export const getLast2Visits = (patientId) => client.get(`/visits/patient/${patie
 // ─── MEDICINES ───
 export const getAllMedicines = () => client.get("/medicines/all");
 export const searchMedicines = (query) => client.get(`/medicines/search?query=${query}`);
-export const addMedicine = (data) => client.post("/medicines/add", data);
+export const addMedicine = (data) => client.post("/medicines/add_medicine", data);
 export const restockMedicine = (id, quantity) =>
   client.put(`/medicines/${id}/restock`, { quantity });
-export const getLowStock = () => client.get("/medicines/low-stock");
+export const getLowStock = () => client.get("/medicines/low_stock");
 
 // ─── PRESCRIPTIONS ───
 export const createPrescription = (data) => client.post("/prescriptions/create", data);
