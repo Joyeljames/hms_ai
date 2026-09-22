@@ -56,40 +56,21 @@ def register_patient(
      return new_patient
 
 
-@router.get("/search_patients",response_model=PatientResponse)
+@router.get("/search_patients", response_model=list[PatientResponse])
 def search_patients(
     query: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-      #search patients by name or phone
-      patient = db.query(Patient).filter(
-            Patient.clinic_id == current_user.clinic_id,
-            or_(
-                Patient.patient_id == query,
-                Patient.name.ilike(f"%{query}%"),
-                Patient.phone == query
-            )
-      ).first()
+    patients = db.query(Patient).filter(
+        Patient.clinic_id == current_user.clinic_id
+    ).filter(
+        (Patient.patient_id.ilike(f"%{query}%")) |
+        (Patient.phone.ilike(f"%{query}%")) |
+        (Patient.name.ilike(f"%{query}%"))
+    ).limit(10).all()
 
-      if not patient:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Patient not found"
-            )
-
-      return {
-
-            "patient_id": patient.patient_id,
-            "name": patient.name,
-            "phone": patient.phone,
-            "gender": patient.gender,
-            "date_of_birth": patient.date_of_birth,
-            "age": calculate_age(patient.date_of_birth),
-            "address": patient.address,
-            "created_at": patient.created_at
-            
-      }
+    return patients
 
 @router.get("/all_patients", response_model=list[PatientResponse])
 def get_all_patients(

@@ -2,11 +2,10 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
+import ReceptionDashboard from "./pages/reception/ReceptionDashboard";
 
 // Placeholder pages — we build these Days 21-24
-function ReceptionDashboard() {
-  return <div className="p-8">Reception Dashboard</div>;
-}
+
 function DoctorDashboard() {
   return <div className="p-8">Doctor Dashboard</div>;
 }

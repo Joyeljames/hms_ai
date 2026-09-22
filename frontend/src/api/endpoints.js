@@ -12,8 +12,9 @@ export const login = (username, password) => {
 };
 
 // ─── PATIENTS ───
-export const registerPatient = (data) => client.post("/patients/register", data);
-export const searchPatients = (query) => client.get(`/patients/search?query=${query}`);
+export const registerPatient = (data) => client.post("/patients/register_patients", data);
+export const searchPatients = (query) =>
+  client.get(`/patients/search_patients?query=${encodeURIComponent(query)}`);
 export const getAllPatients = () => client.get("/patients/all");
 
 // ─── APPOINTMENTS ───
@@ -22,11 +23,13 @@ export const getTodayQueue = () => client.get("/appointments/today");
 export const updateAppointmentStatus = (id, status) =>
   client.put(`/appointments/${id}/status`, { status });
 export const getTodayStats = () => client.get("/appointments/stats/today");
+export const getDoctors = () => client.get("/appointments/doctors");
 
 // ─── VISITS ───
 export const createVisit = (data) => client.post("/visits/create", data);
 export const getPatientVisits = (patientId) => client.get(`/visits/patient/${patientId}`);
 export const getLast2Visits = (patientId) => client.get(`/visits/patient/${patientId}/last2`);
+
 
 // ─── MEDICINES ───
 export const getAllMedicines = () => client.get("/medicines/all");

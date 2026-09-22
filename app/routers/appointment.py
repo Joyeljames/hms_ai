@@ -87,17 +87,35 @@ def book_appointment(
         "created_at": new_appointment.created_at
     }
 
-@router.get("/today", response_model=list[AppointmentResponse])
+@router.get("/today")
 def get_todays_appointments(
-    db:Session=Depends(get_db),
-    current_user:User=Depends(get_current_user)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     appointments = db.query(Appointment).filter(
         Appointment.clinic_id == current_user.clinic_id,
         Appointment.date == date.today()
     ).order_by(Appointment.token_number).all()
 
-    return appointments
+    result = []
+    for a in appointments:
+        patient = db.query(Patient).filter(
+            Patient.patient_id == a.patient_id,
+            Patient.clinic_id == current_user.clinic_id
+        ).first()
+        doctor = db.query(User).filter(User.id == a.doctor_id).first()
+
+        result.append({
+            "id": a.id,
+            "token_number": a.token_number,
+            "patient_id": a.patient_id,
+            "patient_name": patient.name if patient else "Unknown",
+            "doctor_name": doctor.name if doctor else "Unknown",
+            "status": a.status,
+            "created_at": a.created_at
+        })
+
+    return result
 
 @router.put("/{appointment_id}/status")
 def update_appointment_status(
@@ -172,3 +190,16 @@ def get_today_stats(
         "with_doctor": with_doctor,
         "done": done
     }
+
+@router.get("/doctors")
+def get_doctors(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    doctors = db.query(User).filter(
+        User.clinic_id == current_user.clinic_id,
+        User.role.in_(["doctor", "admin"]),
+        User.is_active == True
+    ).all()
+
+    return [{"id": d.id, "name": d.name} for d in doctors]
