@@ -37,7 +37,7 @@ export const searchMedicines = (query) => client.get(`/medicines/search?query=${
 export const addMedicine = (data) => client.post("/medicines/add_medicine", data);
 export const restockMedicine = (id, quantity) =>
   client.put(`/medicines/${id}/restock`, { quantity });
-export const getLowStock = () => client.get("/medicines/low_stock");
+export const getLowStock = () => client.get("/medicines/low_stock");23
 
 // ─── PRESCRIPTIONS ───
 export const createPrescription = (data) => client.post("/prescriptions/create", data);
@@ -54,6 +54,7 @@ export const collectPayment = (billId, method) =>
   client.post(`/billing/${billId}/pay`, { payment_method: method });
 export const getPendingBills = () => client.get("/billing/pending");
 export const getTodayRevenue = () => client.get("/billing/today/revenue");
+export const getReadyForBilling = () => client.get("/billing/ready");
 
 // ─── ADMIN ───
 export const createStaff = (data) => client.post("/admin/staff/create", data);

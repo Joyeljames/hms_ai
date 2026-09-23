@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.models import Bill, ClinicSettings, Prescription, Patient, User
+from app.models import Bill, ClinicSettings, Prescription, Patient, User,Visits,PrescriptionItem,Medicine
 from app.schemas import BillCreate, BillResponse, PaymentRequest
 from app.core.auth import get_current_user
 from app.models import PrescriptionItem, Medicine
@@ -99,6 +99,59 @@ def create_bill(
         "status": new_bill.status,
         "created_at": new_bill.created_at
     }
+@router.get("/ready")
+def get_ready_for_billing(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Dispensed prescriptions that have no bill yet."""
+    prescriptions = db.query(Prescription).filter(
+        Prescription.clinic_id == current_user.clinic_id,
+        Prescription.status == "dispensed"
+    ).order_by(Prescription.created_at.desc()).all()
+
+    result = []
+    for p in prescriptions:
+        # skip if already billed
+        existing = db.query(Bill).filter(
+            Bill.prescription_id == p.id,
+            Bill.clinic_id == current_user.clinic_id
+        ).first()
+        if existing:
+            continue
+
+        patient = db.query(Patient).filter(
+            Patient.patient_id == p.patient_id,
+            Patient.clinic_id == current_user.clinic_id
+        ).first()
+
+        # medicine total
+        items = db.query(PrescriptionItem).filter(
+            PrescriptionItem.prescription_id == p.id
+        ).all()
+
+        medicine_total = 0
+        for item in items:
+            med = db.query(Medicine).filter(Medicine.id == item.medicine_id).first()
+            if med:
+                medicine_total += item.quantity * med.price_per_unit
+
+        # is this their first visit? -> registration fee
+        visit_count = db.query(Visits).filter(
+            Visits.patient_id == p.patient_id,
+            Visits.clinic_id == current_user.clinic_id
+        ).count()
+
+        result.append({
+            "prescription_id": p.id,
+            "patient_id": p.patient_id,
+            "patient_name": patient.name if patient else "Unknown",
+            "medicine_total": round(medicine_total, 2),
+            "is_new_patient": visit_count <= 1,
+            "created_at": p.created_at
+        })
+
+    return result
 
 
 @router.post("/{bill_id}/pay")

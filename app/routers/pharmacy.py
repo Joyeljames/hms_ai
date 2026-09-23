@@ -44,7 +44,6 @@ def view_prescription(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # Pharmacist clicks to view what doctor prescribed
     prescription = db.query(Prescription).filter(
         Prescription.id == prescription_id,
         Prescription.clinic_id == current_user.clinic_id
@@ -54,7 +53,8 @@ def view_prescription(
         raise HTTPException(404, "Prescription not found")
 
     patient = db.query(Patient).filter(
-        Patient.patient_id == prescription.patient_id
+        Patient.patient_id == prescription.patient_id,
+        Patient.clinic_id == current_user.clinic_id
     ).first()
 
     items = db.query(PrescriptionItem).filter(
@@ -67,16 +67,21 @@ def view_prescription(
             Medicine.id == item.medicine_id
         ).first()
 
+        stock = medicine.stock_quantity if medicine else 0
+        price = medicine.price_per_unit if medicine else 0
+
         items_list.append({
-            "prescription_item_id": item.id,
+            "prescription_item_id": item.id,          # ← needed for dispense
             "medicine_id": item.medicine_id,
             "medicine_name": medicine.name if medicine else "Unknown",
             "frequency": item.frequency,
             "duration": item.duration,
-            "quantity": item.quantity,  # doctor's quantity
+            "quantity": item.quantity,
             "timing": item.timing,
-            "in_stock": medicine.stock_quantity >= item.quantity if medicine else False,
-            "available_stock": medicine.stock_quantity if medicine else 0
+            "price_per_unit": price,                  # ← was missing
+            "total_price": item.quantity * price,
+            "available_stock": stock,
+            "in_stock": stock >= item.quantity
         })
 
     return {
@@ -86,7 +91,6 @@ def view_prescription(
         "status": prescription.status,
         "items": items_list
     }
-
 
 @router.post("/dispense/{prescription_id}")
 def dispense_prescription(
