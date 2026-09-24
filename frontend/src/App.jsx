@@ -1,17 +1,14 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Splash from "./pages/Splash";
 import Login from "./pages/Login";
 import ReceptionDashboard from "./pages/reception/ReceptionDashboard";
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
 import PharmacyDashboard from "./pages/pharmacy/PharmacyDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
-// Placeholder pages — we build these Days 21-24
-
-
-
-// Send user to their role's dashboard
 function RoleRedirect() {
   const { user, loading } = useAuth();
 
@@ -30,8 +27,14 @@ function RoleRedirect() {
 }
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  const dismissSplash = () => setShowSplash(false);
+
   return (
     <AuthProvider>
+      {showSplash && <Splash onDone={dismissSplash} />}
+
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
