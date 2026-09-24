@@ -5,13 +5,11 @@ import Login from "./pages/Login";
 import ReceptionDashboard from "./pages/reception/ReceptionDashboard";
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
 import PharmacyDashboard from "./pages/pharmacy/PharmacyDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 // Placeholder pages — we build these Days 21-24
 
 
-function AdminDashboard() {
-  return <div className="p-8">Admin Dashboard</div>;
-}
 
 // Send user to their role's dashboard
 function RoleRedirect() {

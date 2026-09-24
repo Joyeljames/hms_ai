@@ -47,6 +47,9 @@ export const getPendingPrescriptions = () => client.get("/prescriptions/pending"
 export const getPharmacyPending = () => client.get("/pharmacy/pending");
 export const viewPrescription = (id) => client.get(`/pharmacy/prescription/${id}`);
 export const dispensePrescription = (id, data) => client.post(`/pharmacy/dispense/${id}`, data);
+export const deactivateStaff = (userId) =>
+  client.put(`/admin/staff/${userId}/deactivate`);
+export const clearAdminChat = () => client.post("/ai/admin/clear");
 
 // ─── BILLING ───
 export const createBill = (data) => client.post("/billing/create", data);
