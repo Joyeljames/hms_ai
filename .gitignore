@@ -217,3 +217,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.env.production
+
+# Data exports
+*.xlsx
+
+# Notebooks
+*.ipynb

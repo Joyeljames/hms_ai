@@ -1,0 +1,52 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: hms-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - hms_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hms-network
+
+  backend:
+    build: .
+    container_name: hms-backend
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      SECRET_KEY: ${SECRET_KEY}
+      ALGORITHM: ${ALGORITHM}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+    networks:
+      - hms-network
+
+  frontend:
+    build: ./frontend
+    container_name: hms-frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    networks:
+      - hms-network
+
+volumes:
+  hms_pgdata:
+
+networks:
+  hms-network:
+    driver: bridge

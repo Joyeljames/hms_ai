@@ -1,0 +1,16 @@
+.git
+.gitignore
+__pycache__
+*.pyc
+*.pyo
+.env
+.venv
+venv/
+.vscode
+.idea
+*.ipynb
+.ipynb_checkpoints
+frontend/
+*.xlsx
+README.md
+tests/
